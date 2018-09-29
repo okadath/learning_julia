@@ -1,13 +1,23 @@
 using Printf
 data=[];rigth=Int64[];left=Int64[]
+b=Int64[]
+sol=Int64[]
 position=0
 #push!(data,2);#pop!(data)
-function print_all()
-	println("datos ",data);println("izquierda ",rigth);println("derecha ",left);end
+function print_all() println("datos ",data);println("izquierda ",rigth);println("derecha ",left);end
+
+function busqueda_amplitud()
+	for j=1:length(data)
+		println(j)
+	end
+end
+
+▓
+🍻
 
 function new_node(val, parent::String="", parent_pos::String="")
-#if the new node is children of a existent node
-#parent_pos values -> "left", "rigth" ,""
+	#if the new node is children of a existent node
+	#parent_pos values -> "left", "rigth" ,""
 	r::Int64=0;l::Int64=0
 	push!(data,val)
 	push!(rigth,r)
@@ -33,3 +43,4 @@ print_all()
 #@show data;#lambda para mostrar una variable
 #println(findfirst( x-> x=="a",data));#lambda
 #println(findfirst(data .== "nodo 1"));#dot syntax
+busqueda_amplitud()
