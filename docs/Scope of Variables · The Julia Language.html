@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)https://docs.julialang.org/en/v1/manual/variables-and-scoping/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Scope of Variables · The Julia Language</title><script async="" src="./Scope of Variables · The Julia Language_files/analytics.js.descarga"></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-28835595-6', 'auto');
+ga('send', 'pageview');
+</script><link rel="canonical" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/index.html"><link href="./Scope of Variables · The Julia Language_files/normalize.min.css" rel="stylesheet" type="text/css"><link href="./Scope of Variables · The Julia Language_files/css" rel="stylesheet" type="text/css"><link href="./Scope of Variables · The Julia Language_files/font-awesome.min.css" rel="stylesheet" type="text/css"><link href="./Scope of Variables · The Julia Language_files/default.min.css" rel="stylesheet" type="text/css"><script>documenterBaseURL="../.."</script><script src="./Scope of Variables · The Julia Language_files/require.min.js.descarga" data-main="../../assets/documenter.js"></script><script src="./Scope of Variables · The Julia Language_files/siteinfo.js.descarga"></script><script src="./Scope of Variables · The Julia Language_files/versions.js.descarga"></script><link href="./Scope of Variables · The Julia Language_files/documenter.css" rel="stylesheet" type="text/css"><link href="./Scope of Variables · The Julia Language_files/julia-manual.css" rel="stylesheet" type="text/css"><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="documenter" src="./Scope of Variables · The Julia Language_files/documenter.js.descarga"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="jquery" src="./Scope of Variables · The Julia Language_files/jquery.min.js.descarga"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="highlight" src="./Scope of Variables · The Julia Language_files/highlight.min.js.descarga"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="headroom" src="./Scope of Variables · The Julia Language_files/headroom.min.js.descarga"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="mathjax" src="./Scope of Variables · The Julia Language_files/MathJax.js.descarga"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="highlight-julia" src="./Scope of Variables · The Julia Language_files/julia.min.js.descarga"></script><script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="highlight-julia-repl" src="./Scope of Variables · The Julia Language_files/julia-repl.min.js.descarga"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.MathJax_Display {text-align: center; margin: 1em 0em; position: relative; display: block!important; text-indent: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; width: 100%}
+.MathJax .merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MathJax .MJX-monospace {font-family: monospace}
+.MathJax .MJX-sans-serif {font-family: sans-serif}
+#MathJax_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true'); padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.MathJax {display: inline; font-style: normal; font-weight: normal; line-height: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; padding: 0; margin: 0}
+.MathJax:focus, body :focus .MathJax {display: inline-table}
+.MathJax.MathJax_FullWidth {text-align: center; display: table-cell!important; width: 10000em!important}
+.MathJax img, .MathJax nobr, .MathJax a {border: 0; padding: 0; margin: 0; max-width: none; max-height: none; min-width: 0; min-height: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+img.MathJax_strut {border: 0!important; padding: 0!important; margin: 0!important; vertical-align: 0!important}
+.MathJax span {display: inline; position: static; border: 0; padding: 0; margin: 0; vertical-align: 0; line-height: normal; text-decoration: none}
+.MathJax nobr {white-space: nowrap!important}
+.MathJax img {display: inline!important; float: none!important}
+.MathJax * {transition: none; -webkit-transition: none; -moz-transition: none; -ms-transition: none; -o-transition: none}
+.MathJax_Processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MathJax_Processed {display: none!important}
+.MathJax_ExBox {display: block!important; overflow: hidden; width: 1px; height: 60ex; min-height: 0; max-height: none}
+.MathJax .MathJax_EmBox {display: block!important; overflow: hidden; width: 1px; height: 60em; min-height: 0; max-height: none}
+.MathJax_LineBox {display: table!important}
+.MathJax_LineBox span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+.MathJax .MathJax_HitBox {cursor: text; background: white; opacity: 0; filter: alpha(opacity=0)}
+.MathJax .MathJax_HitBox * {filter: none; opacity: 1; background: transparent}
+#MathJax_Tooltip * {filter: none; opacity: 1; background: transparent}
+@font-face {font-family: MathJax_Main; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Main-bold; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Main-italic; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Math-italic; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Caligraphic; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size1; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size2; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size3; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf?V=2.7.1') format('opentype')}
+@font-face {font-family: MathJax_Size4; src: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff?V=2.7.1') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf?V=2.7.1') format('opentype')}
+.MathJax .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head><body><div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;"><div id="MathJax_Hidden"></div></div><div id="MathJax_Message" style="display: none;"></div><nav class="toc"><a href="https://docs.julialang.org/en/v1/index.html"><img class="logo" src="./Scope of Variables · The Julia Language_files/logo.png" alt="The Julia Language logo"></a><h1>The Julia Language</h1><select id="version-selector" onchange="window.location.href=this.value" style="visibility: visible;"><option value="#" selected="selected">v1.0.1</option><option value="../../../v1.0">v1.0</option><option value="../../../v0.7">v0.7</option><option value="../../../v0.6">v0.6</option><option value="../../../v0.5">v0.5</option><option value="../../../v0.4">v0.4</option><option value="../../../v0.3">v0.3</option><option value="../../../v1.1-dev">v1.1-dev</option></select><form class="search" id="search-form" action="https://docs.julialang.org/en/v1/search/"><input id="search-query" name="q" type="text" placeholder="Search docs"></form><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/">Home</a></li><li><span class="toctext">Manual</span><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/getting-started/">Getting Started</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/variables/">Variables</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/integers-and-floating-point-numbers/">Integers and Floating-Point Numbers</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/mathematical-operations/">Mathematical Operations and Elementary Functions</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/complex-and-rational-numbers/">Complex and Rational Numbers</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/strings/">Strings</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/functions/">Functions</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/control-flow/">Control Flow</a></li><li class="current"><a class="toctext" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/">Scope of Variables</a><ul class="internal"><li class="toplevel"><a class="toctext" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#man-scope-table-1"></a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Global-Scope-1">Global Scope</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Local-Scope-1">Local Scope</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Constants-1">Constants</a></li></ul></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/types/">Types</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/methods/">Methods</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/constructors/">Constructors</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/conversion-and-promotion/">Conversion and Promotion</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/interfaces/">Interfaces</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/modules/">Modules</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/documentation/">Documentation</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/metaprogramming/">Metaprogramming</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/arrays/">Multi-dimensional Arrays</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/missing/">Missing Values</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/networking-and-streams/">Networking and Streams</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/parallel-computing/">Parallel Computing</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/running-external-programs/">Running External Programs</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/">Calling C and Fortran Code</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/handling-operating-system-variation/">Handling Operating System Variation</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/environment-variables/">Environment Variables</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/embedding/">Embedding Julia</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/code-loading/">Code Loading</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/profile/">Profiling</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/stacktraces/">Stack Traces</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/performance-tips/">Performance Tips</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/workflow-tips/">Workflow Tips</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/style-guide/">Style Guide</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/faq/">Frequently Asked Questions</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/noteworthy-differences/">Noteworthy Differences from other Languages</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/manual/unicode-input/">Unicode Input</a></li></ul></li><li><span class="toctext">Base</span><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/base/">Essentials</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/collections/">Collections and Data Structures</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/math/">Mathematics</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/numbers/">Numbers</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/strings/">Strings</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/arrays/">Arrays</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/parallel/">Tasks</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/multi-threading/">Multi-Threading</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/constants/">Constants</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/file/">Filesystem</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/io-network/">I/O and Network</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/punctuation/">Punctuation</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/sort/">Sorting and Related Functions</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/iterators/">Iteration utilities</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/c/">C Interface</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/libc/">C Standard Library</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/stacktraces/">StackTraces</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/base/simd-types/">SIMD Support</a></li></ul></li><li><span class="toctext">Standard Library</span><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Base64/">Base64</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/CRC32c/">CRC32c</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Dates/">Dates</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/DelimitedFiles/">Delimited Files</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Distributed/">Distributed Computing</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/FileWatching/">File Events</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/InteractiveUtils/">Interactive Utilities</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/LibGit2/">LibGit2</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Libdl/">Dynamic Linker</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/LinearAlgebra/">Linear Algebra</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Logging/">Logging</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Markdown/">Markdown</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Mmap/">Memory-mapped I/O</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Pkg/">Pkg</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Printf/">Printf</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Profile/">Profiling</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/REPL/">The Julia REPL</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Random/">Random Numbers</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/SHA/">SHA</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Serialization/">Serialization</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/SharedArrays/">Shared Arrays</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Sockets/">Sockets</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/SparseArrays/">Sparse Arrays</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Statistics/">Statistics</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Test/">Unit Testing</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/UUIDs/">UUIDs</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/stdlib/Unicode/">Unicode</a></li></ul></li><li><span class="toctext">Developer Documentation</span><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/reflection/">Reflection and introspection</a></li><li><span class="toctext">Documentation of Julia's Internals</span><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/init/">Initialization of the Julia runtime</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/ast/">Julia ASTs</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/types/">More about types</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/object/">Memory layout of Julia Objects</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/eval/">Eval of Julia code</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/callconv/">Calling Conventions</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/compiler/">High-level Overview of the Native-Code Generation Process</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/functions/">Julia Functions</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/cartesian/">Base.Cartesian</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/meta/">Talking to the compiler (the <code>:meta</code> mechanism)</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/subarrays/">SubArrays</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/isbitsunionarrays/">isbits Union Optimizations</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/sysimg/">System Image Building</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/llvm/">Working with LLVM</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/stdio/">printf() and stdio in the Julia runtime</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/boundscheck/">Bounds checking</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/locks/">Proper maintenance and care of multi-threading locks</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/offset-arrays/">Arrays with custom indices</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/require/">Module loading</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/inference/">Inference</a></li></ul></li><li><span class="toctext">Developing/debugging Julia's C code</span><ul><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/backtraces/">Reporting and analyzing crashes (segfaults)</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/debuggingtips/">gdb debugging tips</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/valgrind/">Using Valgrind with Julia</a></li><li><a class="toctext" href="https://docs.julialang.org/en/v1/devdocs/sanitizers/">Sanitizer support</a></li></ul></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li>Manual</li><li><a href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/">Scope of Variables</a></li></ul><a class="edit-page" href="https://github.com/JuliaLang/julia/blob/master/doc/src/manual/variables-and-scoping.md"><span class="fa"></span> Edit on GitHub</a></nav><hr><div id="topbar"><span>Scope of Variables</span><a class="fa fa-bars" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#"></a></div></header><h1><a class="nav-anchor" id="scope-of-variables-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#scope-of-variables-1">Scope of Variables</a></h1><p>The <em>scope</em> of a variable is the region of code within which a variable is visible. Variable scoping helps avoid variable naming conflicts. The concept is intuitive: two functions can both have arguments called <code>x</code> without the two <code>x</code>'s referring to the same thing. Similarly there are many other cases where different blocks of code can use the same name without referring to the same thing. The rules for when the same variable name does or doesn't refer to the same thing are called scope rules; this section spells them out in detail.</p><p>Certain constructs in the language introduce <em>scope blocks</em>, which are regions of code that are eligible to be the scope of some set of variables. The scope of a variable cannot be an arbitrary set of source lines; instead, it will always line up with one of these blocks. There are two main types of scopes in Julia, <em>global scope</em> and <em>local scope</em>, the latter can be nested. The constructs introducing scope blocks are:</p><h1><a class="nav-anchor" id="man-scope-table-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#man-scope-table-1"></a></h1><ul><li><p>Scope blocks that may nest only in other global scope blocks:</p><ul><li><p>global scope</p><ul><li><p>module, baremodule</p></li><li><p>at interactive prompt (REPL)</p></li></ul></li><li><p>local scope (don't allow nesting)</p><ul><li>(mutable) struct, macro</li></ul></li></ul></li><li><p>Scope blocks which may nest anywhere (in global or local scope):</p><ul><li><p>local scope</p><ul><li><p>for, while, try-catch-finally, let</p></li><li><p>functions (either syntax, anonymous &amp; do-blocks)</p></li><li><p>comprehensions, broadcast-fusing</p></li></ul></li></ul></li></ul><p>Notably missing from this table are <a href="https://docs.julialang.org/en/v1/manual/control-flow/#man-compound-expressions-1">begin blocks</a> and <a href="https://docs.julialang.org/en/v1/manual/control-flow/#man-conditional-evaluation-1">if blocks</a> which do <em>not</em> introduce new scope blocks. Both types of scopes follow somewhat different rules which will be explained below.</p><p>Julia uses <a href="https://en.wikipedia.org/wiki/Scope_%28computer_science%29#Lexical_scoping_vs._dynamic_scoping">lexical scoping</a>, meaning that a function's scope does not inherit from its caller's scope, but from the scope in which the function was defined. For example, in the following code the <code>x</code> inside <code>foo</code> refers to the <code>x</code> in the global scope of its module <code>Bar</code>:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">module</span> Bar
+           x = <span class="hljs-number">1</span>
+           foo() = x
+       <span class="hljs-keyword">end</span>;</span></code></pre><p>and not a <code>x</code> in the scope where <code>foo</code> is used:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">import</span> .Bar
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x = -<span class="hljs-number">1</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Bar.foo()
+</span>1</code></pre><p>Thus <em>lexical scope</em> means that the scope of variables can be inferred from the source code alone.</p><h2><a class="nav-anchor" id="Global-Scope-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Global-Scope-1">Global Scope</a></h2><p>Each module introduces a new global scope, separate from the global scope of all other modules; there is no all-encompassing global scope. Modules can introduce variables of other modules into their scope through the <a href="https://docs.julialang.org/en/v1/manual/modules/#modules-1">using or import</a> statements or through qualified access using the dot-notation, i.e. each module is a so-called <em>namespace</em>. Note that variable bindings can only be changed within their global scope and not from an outside module.</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">module</span> A
+           a = <span class="hljs-number">1</span> <span class="hljs-comment"># a global in A's scope</span>
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">module</span> B
+           <span class="hljs-keyword">module</span> C
+               c = <span class="hljs-number">2</span>
+           <span class="hljs-keyword">end</span>
+           b = C.c    <span class="hljs-comment"># can access the namespace of a nested global scope</span>
+                      <span class="hljs-comment"># through a qualified access</span>
+           <span class="hljs-keyword">import</span> ..A <span class="hljs-comment"># makes module A available</span>
+           d = A.a
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">module</span> D
+           b = a <span class="hljs-comment"># errors as D's global scope is separate from A's</span>
+       <span class="hljs-keyword">end</span>;
+</span>ERROR: UndefVarError: a not defined
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">module</span> E
+           <span class="hljs-keyword">import</span> ..A <span class="hljs-comment"># make module A available</span>
+           A.a = <span class="hljs-number">2</span>    <span class="hljs-comment"># throws below error</span>
+       <span class="hljs-keyword">end</span>;
+</span>ERROR: cannot assign variables in other modules</code></pre><p>Note that the interactive prompt (aka REPL) is in the global scope of the module <code>Main</code>.</p><h2><a class="nav-anchor" id="Local-Scope-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Local-Scope-1">Local Scope</a></h2><p>A new local scope is introduced by most code blocks (see above <a href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#man-scope-table-1">table</a> for a complete list). A local scope inherits all the variables from a parent local scope, both for reading and writing. Additionally, the local scope inherits all globals that are assigned to in its parent global scope block (if it is surrounded by a global <code>if</code> or <code>begin</code> scope). Unlike global scopes, local scopes are not namespaces, thus variables in an inner scope cannot be retrieved from the parent scope through some sort of qualified access.</p><p>The following rules and examples pertain to local scopes. A newly introduced variable in a local scope does not back-propagate to its parent scope. For example, here the <span><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 0.595em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.488em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.619em, 1000.49em, 2.373em, -999.997em); top: -2.206em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mi" id="MathJax-Span-3" style="font-family: MathJax_Math-italic;">z<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.628em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>z</mi></math></span></span><script type="math/tex" id="MathJax-Element-1">z</script></span> is not introduced into the top-level scope:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+           z = i
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> z
+</span>ERROR: UndefVarError: z not defined</code></pre><p>(Note, in this and all following examples it is assumed that their top-level is a global scope with a clean workspace, for instance a newly started REPL.)</p><p>Inside a local scope a variable can be forced to be a new local variable using the <code>local</code> keyword:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> x = <span class="hljs-number">0</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+           <span class="hljs-keyword">local</span> x <span class="hljs-comment"># this is also the default</span>
+           x = i + <span class="hljs-number">1</span>
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x
+</span>0</code></pre><p>Inside a local scope a global variable can be assigned to by using the keyword <code>global</code>:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+           <span class="hljs-keyword">global</span> z
+           z = i
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> z
+</span>10</code></pre><p>The location of both the <code>local</code> and <code>global</code> keywords within the scope block is irrelevant. The following is equivalent to the last example (although stylistically worse):</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>:<span class="hljs-number">10</span>
+           z = i
+           <span class="hljs-keyword">global</span> z
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> z
+</span>10</code></pre><p>The <code>local</code> and <code>global</code> keywords can also be applied to destructuring assignments, e.g. <code>local x, y = 1, 2</code>. In this case the keyword affects all listed variables.</p><p>Local scopes are introduced by most block keywords, with notable exceptions of <code>begin</code> and <code>if</code>.</p><p>In a local scope, all variables are inherited from its parent global scope block unless:</p><ul><li>an assignment would result in a modified <em>global</em> variable, or</li><li>a variable is specifically marked with the keyword <code>local</code>.</li></ul><p>Thus global variables are only inherited for reading but not for writing:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> x, y = <span class="hljs-number">1</span>, <span class="hljs-number">2</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> foo()
+           x = <span class="hljs-number">2</span>        <span class="hljs-comment"># assignment introduces a new local</span>
+           <span class="hljs-keyword">return</span> x + y <span class="hljs-comment"># y refers to the global</span>
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> foo()
+</span>4
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x
+</span>1</code></pre><p>An explicit <code>global</code> is needed to assign to a global variable:</p><div class="admonition sidebar"><div class="admonition-title">Avoiding globals</div><div class="admonition-text"><p>Avoiding changing the value of global variables is considered by many to be a programming best-practice. One reason for this is that remotely changing the state of global variables in other modules should be done with care as it makes the local behavior of the program hard to reason about. This is why the scope blocks that introduce local scope require the <span><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-2-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;mi&gt;o&lt;/mi&gt;&lt;mi&gt;b&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;l&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-4" style="width: 3.02em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.589em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.35em, 1002.53em, 2.589em, -999.997em); top: -2.206em; left: 0em;"><span class="mrow" id="MathJax-Span-5"><span class="mi" id="MathJax-Span-6" style="font-family: MathJax_Math-italic;">g<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.003em;"></span></span><span class="mi" id="MathJax-Span-7" style="font-family: MathJax_Math-italic;">l</span><span class="mi" id="MathJax-Span-8" style="font-family: MathJax_Math-italic;">o</span><span class="mi" id="MathJax-Span-9" style="font-family: MathJax_Math-italic;">b</span><span class="mi" id="MathJax-Span-10" style="font-family: MathJax_Math-italic;">a</span><span class="mi" id="MathJax-Span-11" style="font-family: MathJax_Math-italic;">l</span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.309em; border-left: 0px solid; width: 0px; height: 1.191em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>g</mi><mi>l</mi><mi>o</mi><mi>b</mi><mi>a</mi><mi>l</mi></math></span></span><script type="math/tex" id="MathJax-Element-2">global</script></span> keyword to declare the intent to modify a global variable.</p></div></div><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> x = <span class="hljs-number">1</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> foobar()
+           <span class="hljs-keyword">global</span> x = <span class="hljs-number">2</span>
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> foobar();
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x
+</span>2</code></pre><p>Note that <em>nested functions</em> can modify their parent scope's <em>local</em> variables:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> x, y = <span class="hljs-number">1</span>, <span class="hljs-number">2</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> baz()
+           x = <span class="hljs-number">2</span> <span class="hljs-comment"># introduces a new local</span>
+           <span class="hljs-keyword">function</span> bar()
+               x = <span class="hljs-number">10</span>       <span class="hljs-comment"># modifies the parent's x</span>
+               <span class="hljs-keyword">return</span> x + y <span class="hljs-comment"># y is global</span>
+           <span class="hljs-keyword">end</span>
+           <span class="hljs-keyword">return</span> bar() + x <span class="hljs-comment"># 12 + 10 (x is modified in call of bar())</span>
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> baz()
+</span>22
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x, y <span class="hljs-comment"># verify that global x and y are unchanged</span>
+</span>(1, 2)</code></pre><p>The reason to allow <em>modifying local</em> variables of parent scopes in nested functions is to allow constructing <a href="https://en.wikipedia.org/wiki/Closure_%28computer_programming%29"><code>closures</code></a> which have a private state, for instance the <span><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-3-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-12" style="width: 2.643em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.266em; height: 0px; font-size: 116%;"><span style="position: absolute; clip: rect(1.404em, 1002.21em, 2.373em, -999.997em); top: -2.206em; left: 0em;"><span class="mrow" id="MathJax-Span-13"><span class="mi" id="MathJax-Span-14" style="font-family: MathJax_Math-italic;">s</span><span class="mi" id="MathJax-Span-15" style="font-family: MathJax_Math-italic;">t</span><span class="mi" id="MathJax-Span-16" style="font-family: MathJax_Math-italic;">a</span><span class="mi" id="MathJax-Span-17" style="font-family: MathJax_Math-italic;">t</span><span class="mi" id="MathJax-Span-18" style="font-family: MathJax_Math-italic;">e</span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left: 0px solid; width: 0px; height: 0.878em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>s</mi><mi>t</mi><mi>a</mi><mi>t</mi><mi>e</mi></math></span></span><script type="math/tex" id="MathJax-Element-3">state</script></span> variable in the following example:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">let</span> state = <span class="hljs-number">0</span>
+           <span class="hljs-keyword">global</span> counter() = (state += <span class="hljs-number">1</span>)
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> counter()
+</span>1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> counter()
+</span>2</code></pre><p>See also the closures in the examples in the next two sections. A variable such as <code>x</code> in the first example and <code>state</code> in the second that is inherited from the enclosing scope by the inner function is sometimes called a <em>captured</em> variable. Captured variables can present performance challenges discussed in <a href="https://docs.julialang.org/en/v1/manual/performance-tips/#man-performance-tips-1">performance tips</a>.</p><p>The distinction between inheriting global scope and nesting local scope can lead to some slight differences between functions defined in local vs. global scopes for variable assignments. Consider the modification of the last example by moving <code>bar</code> to the global scope:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> x, y = <span class="hljs-number">1</span>, <span class="hljs-number">2</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> bar()
+           x = <span class="hljs-number">10</span> <span class="hljs-comment"># local, no longer a closure variable</span>
+           <span class="hljs-keyword">return</span> x + y
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> quz()
+           x = <span class="hljs-number">2</span> <span class="hljs-comment"># local</span>
+           <span class="hljs-keyword">return</span> bar() + x <span class="hljs-comment"># 12 + 2 (x is not modified)</span>
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> quz()
+</span>14
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x, y <span class="hljs-comment"># verify that global x and y are unchanged</span>
+</span>(1, 2)</code></pre><p>Note that the above nesting rules do not pertain to type and macro definitions as they can only appear at the global scope. There are special scoping rules concerning the evaluation of default and keyword function arguments which are described in the <a href="https://docs.julialang.org/en/v1/manual/functions/#man-functions-1">Function section</a>.</p><p>An assignment introducing a variable used inside a function, type or macro definition need not come before its inner usage:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> f = y -&gt; y + a;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f(<span class="hljs-number">3</span>)
+</span>ERROR: UndefVarError: a not defined
+Stacktrace:
+[...]
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> a = <span class="hljs-number">1</span>
+</span>1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f(<span class="hljs-number">3</span>)
+</span>4</code></pre><p>This behavior may seem slightly odd for a normal variable, but allows for named functions – which are just normal variables holding function objects – to be used before they are defined. This allows functions to be defined in whatever order is intuitive and convenient, rather than forcing bottom up ordering or requiring forward declarations, as long as they are defined by the time they are actually called. As an example, here is an inefficient, mutually recursive way to test if positive integers are even or odd:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> even(n) = (n == <span class="hljs-number">0</span>) ? <span class="hljs-literal">true</span> : odd(n - <span class="hljs-number">1</span>);
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> odd(n) = (n == <span class="hljs-number">0</span>) ? <span class="hljs-literal">false</span> : even(n - <span class="hljs-number">1</span>);
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> even(<span class="hljs-number">3</span>)
+</span>false
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> odd(<span class="hljs-number">3</span>)
+</span>true</code></pre><p>Julia provides built-in, efficient functions to test for oddness and evenness called <a href="https://docs.julialang.org/en/v1/base/numbers/#Base.iseven"><code>iseven</code></a> and <a href="https://docs.julialang.org/en/v1/base/numbers/#Base.isodd"><code>isodd</code></a> so the above definitions should only be considered to be examples of scope, not efficient design.</p><h3><a class="nav-anchor" id="Let-Blocks-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Let-Blocks-1">Let Blocks</a></h3><p>Unlike assignments to local variables, <code>let</code> statements allocate new variable bindings each time they run. An assignment modifies an existing value location, and <code>let</code> creates new locations. This difference is usually not important, and is only detectable in the case of variables that outlive their scope via closures. The <code>let</code> syntax accepts a comma-separated series of assignments and variable names:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> x, y, z = -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">let</span> x = <span class="hljs-number">1</span>, z
+           println(<span class="hljs-string">"x: <span class="hljs-variable">$x</span>, y: <span class="hljs-variable">$y</span>"</span>) <span class="hljs-comment"># x is local variable, y the global</span>
+           println(<span class="hljs-string">"z: <span class="hljs-variable">$z</span>"</span>) <span class="hljs-comment"># errors as z has not been assigned yet but is local</span>
+       <span class="hljs-keyword">end</span>
+</span>x: 1, y: -1
+ERROR: UndefVarError: z not defined</code></pre><p>The assignments are evaluated in order, with each right-hand side evaluated in the scope before the new variable on the left-hand side has been introduced. Therefore it makes sense to write something like <code>let x = x</code> since the two <code>x</code> variables are distinct and have separate storage. Here is an example where the behavior of <code>let</code> is needed:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> Fs = <span class="hljs-built_in">Vector</span>{<span class="hljs-built_in">Any</span>}(undef, <span class="hljs-number">2</span>); i = <span class="hljs-number">1</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">while</span> i &lt;= <span class="hljs-number">2</span>
+           Fs[i] = ()-&gt;i
+           <span class="hljs-keyword">global</span> i += <span class="hljs-number">1</span>
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Fs[<span class="hljs-number">1</span>]()
+</span>3
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Fs[<span class="hljs-number">2</span>]()
+</span>3</code></pre><p>Here we create and store two closures that return variable <code>i</code>. However, it is always the same variable <code>i</code>, so the two closures behave identically. We can use <code>let</code> to create a new binding for <code>i</code>:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> Fs = <span class="hljs-built_in">Vector</span>{<span class="hljs-built_in">Any</span>}(undef, <span class="hljs-number">2</span>); i = <span class="hljs-number">1</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">while</span> i &lt;= <span class="hljs-number">2</span>
+           <span class="hljs-keyword">let</span> i = i
+               Fs[i] = ()-&gt;i
+           <span class="hljs-keyword">end</span>
+           <span class="hljs-keyword">global</span> i += <span class="hljs-number">1</span>
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Fs[<span class="hljs-number">1</span>]()
+</span>1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Fs[<span class="hljs-number">2</span>]()
+</span>2</code></pre><p>Since the <code>begin</code> construct does not introduce a new scope, it can be useful to use a zero-argument <code>let</code> to just introduce a new scope block without creating any new bindings:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">let</span>
+           <span class="hljs-keyword">local</span> x = <span class="hljs-number">1</span>
+           <span class="hljs-keyword">let</span>
+               <span class="hljs-keyword">local</span> x = <span class="hljs-number">2</span>
+           <span class="hljs-keyword">end</span>
+           x
+       <span class="hljs-keyword">end</span>
+</span>1</code></pre><p>Since <code>let</code> introduces a new scope block, the inner local <code>x</code> is a different variable than the outer local <code>x</code>.</p><h3><a class="nav-anchor" id="For-Loops-and-Comprehensions-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#For-Loops-and-Comprehensions-1">For Loops and Comprehensions</a></h3><p><code>for</code> loops, <code>while</code> loops, and <a href="https://docs.julialang.org/en/v1/manual/arrays/#Comprehensions-1">Comprehensions</a> have the following behavior: any new variables introduced in their body scopes are freshly allocated for each loop iteration, as if the loop body were surrounded by a <code>let</code> block:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> Fs = <span class="hljs-built_in">Vector</span>{<span class="hljs-built_in">Any</span>}(undef, <span class="hljs-number">2</span>);
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">for</span> j = <span class="hljs-number">1</span>:<span class="hljs-number">2</span>
+           Fs[j] = ()-&gt;j
+       <span class="hljs-keyword">end</span>
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Fs[<span class="hljs-number">1</span>]()
+</span>1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Fs[<span class="hljs-number">2</span>]()
+</span>2</code></pre><p>A <code>for</code> loop or comprehension iteration variable is always a new variable:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> f()
+           i = <span class="hljs-number">0</span>
+           <span class="hljs-keyword">for</span> i = <span class="hljs-number">1</span>:<span class="hljs-number">3</span>
+           <span class="hljs-keyword">end</span>
+           <span class="hljs-keyword">return</span> i
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f()
+</span>0</code></pre><p>However, it is occasionally useful to reuse an existing local variable as the iteration variable. This can be done conveniently by adding the keyword <code>outer</code>:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function</span> f()
+           i = <span class="hljs-number">0</span>
+           <span class="hljs-keyword">for</span> outer i = <span class="hljs-number">1</span>:<span class="hljs-number">3</span>
+           <span class="hljs-keyword">end</span>
+           <span class="hljs-keyword">return</span> i
+       <span class="hljs-keyword">end</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f()
+</span>3</code></pre><h2><a class="nav-anchor" id="Constants-1" href="https://docs.julialang.org/en/v1/manual/variables-and-scoping/#Constants-1">Constants</a></h2><p>A common use of variables is giving names to specific, unchanging values. Such variables are only assigned once. This intent can be conveyed to the compiler using the <code>const</code> keyword:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> <span class="hljs-literal">e</span>  = <span class="hljs-number">2.71828182845904523536</span>;
+</span>
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> <span class="hljs-literal">pi</span> = <span class="hljs-number">3.14159265358979323846</span>;</span></code></pre><p>Multiple variables can be declared in a single <code>const</code> statement:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> a, b = <span class="hljs-number">1</span>, <span class="hljs-number">2</span>
+</span>(1, 2)</code></pre><p>The <code>const</code> declaration should only be used in global scope on globals. It is difficult for the compiler to optimize code involving global variables, since their values (or even their types) might change at almost any time. If a global variable will not change, adding a <code>const</code> declaration solves this performance problem.</p><p>Local constants are quite different. The compiler is able to determine automatically when a local variable is constant, so local constant declarations are not necessary, and in fact are currently not supported.</p><p>Special top-level assignments, such as those performed by the <code>function</code> and <code>struct</code> keywords, are constant by default.</p><p>Note that <code>const</code> only affects the variable binding; the variable may be bound to a mutable object (such as an array), and that object may still be modified. Additionally when one tries to assign a value to a variable that is declared constant the following scenarios are possible:</p><ul><li>if a new value has a different type than the type of the constant then an error is thrown:</li></ul><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> x = <span class="hljs-number">1.0</span>
+</span>1.0
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x = <span class="hljs-number">1</span>
+</span>ERROR: invalid redefinition of constant x</code></pre><ul><li>if a new value has the same type as the constant then a warning is printed:</li></ul><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> y = <span class="hljs-number">1.0</span>
+</span>1.0
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> y = <span class="hljs-number">2.0</span>
+</span>WARNING: redefining constant y
+2.0</code></pre><ul><li>if an assignment would not result in the change of variable value no message is given:</li></ul><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> z = <span class="hljs-number">100</span>
+</span>100
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> z = <span class="hljs-number">100</span>
+</span>100</code></pre><p>The last rule applies for immutable objects even if the variable binding would change, e.g.:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> s1 = <span class="hljs-string">"1"</span>
+</span>"1"
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> s2 = <span class="hljs-string">"1"</span>
+</span>"1"
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> pointer.([s1, s2], <span class="hljs-number">1</span>)
+</span>2-element Array{Ptr{UInt8},1}:
+ Ptr{UInt8} @0x00000000132c9638
+ Ptr{UInt8} @0x0000000013dd3d18
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> s1 = s2
+</span>"1"
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> pointer.([s1, s2], <span class="hljs-number">1</span>)
+</span>2-element Array{Ptr{UInt8},1}:
+ Ptr{UInt8} @0x0000000013dd3d18
+ Ptr{UInt8} @0x0000000013dd3d18</code></pre><p>However, for mutable objects the warning is printed as expected:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> a = [<span class="hljs-number">1</span>]
+</span>1-element Array{Int64,1}:
+ 1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> a = [<span class="hljs-number">1</span>]
+</span>WARNING: redefining constant a
+1-element Array{Int64,1}:
+ 1</code></pre><p>Note that although sometimes possible, changing the value of a <code>const</code> variable is strongly discouraged, and is intended only for convenience during interactive use. Changing constants can cause various problems or unexpected behaviors. For instance, if a method references a constant and is already compiled before the constant is changed then it might keep using the old value:</p><pre><code class="language-julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">const</span> x = <span class="hljs-number">1</span>
+</span>1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f() = x
+</span>f (generic function with 1 method)
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f()
+</span>1
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> x = <span class="hljs-number">2</span>
+</span>WARNING: redefining constant x
+2
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> f()
+</span>1</code></pre><footer><hr><a class="previous" href="https://docs.julialang.org/en/v1/manual/control-flow/"><span class="direction">Previous</span><span class="title">Control Flow</span></a><a class="next" href="https://docs.julialang.org/en/v1/manual/types/"><span class="direction">Next</span><span class="title">Types</span></a></footer></article>
+<div style="position: absolute; width: 0px; height: 0px; overflow: hidden; padding: 0px; border: 0px; margin: 0px;"><div id="MathJax_Font_Test" style="position: absolute; visibility: hidden; top: 0px; left: 0px; width: auto; padding: 0px; border: 0px; margin: 0px; white-space: nowrap; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; font-size: 40px; font-weight: normal; font-style: normal; font-family: MathJax_Math-italic, sans-serif;"></div></div></body></html>

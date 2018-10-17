@@ -36,3 +36,37 @@ a=[]
 @anida a
 @anida a
 @show a
+
+using DataStructures
+x=8
+q = Queue{Int}()
+enqueue!(q, x)
+# enqueue!(q, 9)
+# println(q)
+# x = front(q)
+# println(x)
+# x = back(q)
+# println(x)
+# x = dequeue!(q)+1
+# println(x)
+# println(q)
+
+#:() y $ son inversos, pero $ solo va dentro de :()
+#la $ es como contenedores para evaluar valores
+#los :() generan expresiones, codigo
+
+
+e = :(for i in 1:10
+        println(i)
+    end)
+println(e)
+@time e
+
+a=:(sin(1))
+println("tipo1 ",typeof(a),a)
+
+a= :( $ :(sin(1)))
+println("tipo2 ",typeof(a),a) 
+
+println(a)
+@time a

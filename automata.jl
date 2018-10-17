@@ -1,10 +1,29 @@
 using Printf
-data=[];rigth=Int64[];left=Int64[]
+data=[]
+H=Int64[]
+D=Int64[]
 path=Int64[]
 sol=Int64[]
+l=0.0
 
 #push!(data,2);#pop!(data)
-function print_all() println("datos ",data);println("derecha ",left);println("izquierda ",rigth);end
+function print_all() println("datos",data, " \n H ",H ,"\n D ",D) end
+
+function print_grafo() 
+	long=length(data)
+	i=1
+	izq=H[i]
+	der=D[i]
+	depth=1
+	for i = 1:long
+           println(data[i])
+           print(H[i])
+           print(D[i])
+       end
+    end
+function es_hijo()
+end
+
 
 function busqueda_amplitud(texto)
 	push!(sol,1)#inicializa
@@ -26,32 +45,28 @@ function busqueda_amplitud(texto)
 	println(reverse(path))#for i=1:length(path) println(data[path[i]]) end
 end
 
+
 function new_node(val, parent::String="", parent_pos::String="")
 	#if the new node is children of a existent node
-	#parent_pos values -> "left", "rigth" ,""
+	#parent_pos values -> "D", "H" ,""
 	r::Int64=0;l::Int64=0
 	push!(data,val)
-	push!(rigth,r)
-	push!(left,l)
+	push!(H,r)
+	push!(D,l)
 	if parent != ""
 		#@printf "tiene padre";#lambda prinf like c
 		v=findfirst(data .== parent)#println("ve es ",v)
-		if parent_pos =="rigth" rigth[v]=length(data) end
-		if parent_pos =="left" left[v]=length(data) end
+		if parent_pos =="H" H[v]=length(data) end
+		if parent_pos =="D" D[v]=length(data) end
 	end
 end
-#length(data)
-new_node("alcoholica?");#lambda para mostrar una variable
-new_node("de uvas?","alcoholica?","rigth")
-new_node("caliente?","alcoholica?","left")
-new_node("vino","de uvas?","rigth")
-new_node("poca cantidad?","de uvas?","left")
-new_node("te","caliente?","rigth")
-new_node("limonada","caliente?","left")
-new_node("licor","poca cantidad?","rigth")
-new_node("cerveza","poca cantidad?","left")
+
+
+new_node("H1");#lambda para mostrar una variable
+new_node("H1","H1","H")
+new_node("H1","H1","D")
 print_all()
 #@show data;#lambda para mostrar una variable
 #println(findfirst( x-> x=="a",data));#lambda
-#println(findfirst(data .== "nodo 1"));#dot syntax
-busqueda_amplitud("cerveza")
+#println(findfirst(data .== "nodo 1"));#dot synt
+print_grafo()
